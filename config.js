@@ -1,3 +1,7 @@
+import dotenv from "dotenv";
+dotenv.config();
+
+//Database Configuration
 export const DATABASE_CONFIG = {
   host: process.env.DATABASE_HOST,
   user: process.env.DATABASE_USER,
