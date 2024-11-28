@@ -1,5 +1,5 @@
 import sql from "mysql2/promise";
-import { DATABASE_CONFIG } from "../config";
+import { DATABASE_CONFIG } from "../config.js";
 
 const pool = sql.createPool(DATABASE_CONFIG);
 
