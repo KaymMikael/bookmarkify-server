@@ -15,3 +15,8 @@ export const DATABASE_CONFIG = {
   keepAliveInitialDelay: 0,
   password: process.env.DATABASE_PASSWORD,
 };
+
+export const CORS_CONFIG = {
+  origin: process.env.ORIGIN,
+  credentials: true,
+};

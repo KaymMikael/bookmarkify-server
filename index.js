@@ -2,12 +2,13 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import AuthRouter from "./routers/auth/router.js";
+import { CORS_CONFIG } from "./config.js";
 
 const app = express();
 
 //middlewares
 app.use(express.json());
-app.use(cors());
+app.use(cors(CORS_CONFIG));
 app.use(cookieParser());
 
 //routers
