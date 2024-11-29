@@ -1,7 +1,7 @@
 import { request, response } from "express";
 import pool from "../../mysql/sql.js";
 import bcrypt from "bcrypt";
-import jwt, { decode, verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const SALT = 10;
 
