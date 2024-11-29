@@ -30,7 +30,15 @@ const register = async (req = request, res = response) => {
     return;
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+    // Check for duplicate entry
+    if (e.code === "ER_DUP_ENTRY") {
+      if (e.message.includes("users.user_name")) {
+        return res.status(409).json({ error: "Username already exists" });
+      } else if (e.message.includes("users.user_email")) {
+        return res.status(409).json({ error: "Email already exists" });
+      }
+    }
+    res.status(500).json({ error: "Internal server error" });
     return;
   }
 };
@@ -85,7 +93,7 @@ const login = async (req = request, res = response) => {
     return;
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ error: "Internal server error" });
     return;
   }
 };
