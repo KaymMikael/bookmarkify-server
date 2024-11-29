@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import UserRouter from "./routers/user/router.js";
+import AuthRouter from "./routers/auth/router.js";
 
 const app = express();
 
@@ -11,7 +11,7 @@ app.use(cors());
 app.use(cookieParser());
 
 //routers
-app.use("/v1/api/users", UserRouter);
+app.use("/v1/api/auth", AuthRouter);
 
 app.get("/v1/api", (req, res) => {
   res.send({ message: "API is working fine." });

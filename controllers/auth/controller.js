@@ -102,11 +102,11 @@ const authenticateUser = (req = request, res = response) => {
   return res.status(200).json(req.user);
 };
 
-const UserController = {
+const AuthController = {
   register,
   login,
   verifyUser,
   authenticateUser,
 };
 
-export default UserController;
+export default AuthController;
