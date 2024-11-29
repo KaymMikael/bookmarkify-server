@@ -11,7 +11,7 @@ app.use(cors());
 app.use(cookieParser());
 
 //routers
-app.use("/v1/api", UserRouter);
+app.use("/v1/api/users", UserRouter);
 
 app.get("/v1/api", (req, res) => {
   res.send({ message: "API is working fine." });
