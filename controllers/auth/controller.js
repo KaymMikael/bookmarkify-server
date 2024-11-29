@@ -45,7 +45,7 @@ const login = async (req = request, res = response) => {
   try {
     //Find user with email, don't include the password on selecting
     const selectUserQuery =
-      "SELECT user_id, user_name, user_email, created_at FROM users WHERE email = ?";
+      "SELECT user_id, user_name, user_email, created_at FROM users WHERE user_email = ?";
     const result = await pool.query(selectUserQuery, [email]);
 
     const user = result[0];
