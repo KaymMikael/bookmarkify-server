@@ -34,6 +34,7 @@ const register = async (req = request, res = response) => {
   }
 };
 
+/* This function adds a signed jwt cookie to the user */
 const login = async (req = request, res = response) => {
   const { email, password } = req.body;
 
@@ -47,7 +48,7 @@ const login = async (req = request, res = response) => {
     const selectUserQuery = "SELECT * FROM users WHERE user_email = ?";
     const result = await pool.query(selectUserQuery, [email]);
 
-    const user = result[0];
+    const user = result[0][0];
     //Check if there are no result
     if (!user) {
       res.status(404).json({ error: "User not found" });
@@ -107,6 +108,7 @@ const verifyUser = (req = request, res = response, next) => {
   }
 };
 
+//if the user is authenticated, return the user data
 const authenticateUser = (req = request, res = response) => {
   return res.status(200).json(req.user);
 };
