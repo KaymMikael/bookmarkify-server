@@ -44,8 +44,7 @@ const login = async (req = request, res = response) => {
 
   try {
     //Find user with email, don't include the password on selecting
-    const selectUserQuery =
-      "SELECT user_id, user_name, user_email, created_at FROM users WHERE user_email = ?";
+    const selectUserQuery = "SELECT * FROM users WHERE user_email = ?";
     const result = await pool.query(selectUserQuery, [email]);
 
     const user = result[0];
@@ -64,8 +63,18 @@ const login = async (req = request, res = response) => {
       return;
     }
 
+    // Create a new object excluding the password
+    const userWithoutPassword = {
+      user_id: user.user_id,
+      user_name: user.user_name,
+      user_email: user.user_email,
+      created_at: user.created_at,
+    };
+
     //Generate jwt token
-    const token = jwt.sign({ user }, process.env.JWT_KEY, { expiresIn: "1d" });
+    const token = jwt.sign(userWithoutPassword, process.env.JWT_KEY, {
+      expiresIn: "1d",
+    });
 
     //add token to cookies
     res.cookie("token", token, { httpOnly: true, secure: true });
