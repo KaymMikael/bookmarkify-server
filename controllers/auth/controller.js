@@ -118,11 +118,18 @@ const authenticateUser = (req = request, res = response) => {
   return res.status(200).json(req.user);
 };
 
+const logout = (req = request, res = response) => {
+  res.clearCookie("token");
+  res.status(204).json({ message: "Logged out" });
+  return;
+};
+
 const AuthController = {
   register,
   login,
   verifyUser,
   authenticateUser,
+  logout
 };
 
 export default AuthController;
