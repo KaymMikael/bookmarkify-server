@@ -101,7 +101,7 @@ const verifyUser = (req = request, res = response, next) => {
     return res.status(401).json({ error: "Not authenticated" });
   }
   try {
-    //verify the decoded token
+    //verify and get the decoded token
     const decoded = jwt.verify(token, process.env.JWT_KEY);
     //Set the decoded user
     req.user = decoded;
