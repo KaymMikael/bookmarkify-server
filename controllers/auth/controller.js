@@ -1,7 +1,7 @@
 import { request, response } from "express";
-import pool from "../../mysql/sql.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import userInstance from "../../models/User.js";
 
 const SALT = 10;
 
@@ -17,11 +17,10 @@ const register = async (req = request, res = response) => {
   try {
     //First hash the password
     const hashedPassword = await bcrypt.hash(password, SALT);
-    //SQL INSERT QUERY
-    const insertUserQuery =
-      "INSERT INTO users (user_name, user_email, user_password) VALUES (?, ?, ?)";
+
+    //Insert User
     const values = [name, email, hashedPassword];
-    const [result] = await pool.query(insertUserQuery, values);
+    const result = await userInstance.insertUser(values);
 
     //Respond with the new created user ID and message
     const userId = result.insertId;
@@ -53,11 +52,8 @@ const login = async (req = request, res = response) => {
   }
 
   try {
-    //Find user with email, don't include the password on selecting
-    const selectUserQuery = "SELECT * FROM users WHERE user_email = ?";
-    const [result] = await pool.query(selectUserQuery, [email]);
-
-    const user = result[0];
+    ///Get the user with email
+    const user = await userInstance.getUserWithEmail(email);
     //Check if there are no result
     if (!user) {
       res.status(404).json({ error: "User not found" });
