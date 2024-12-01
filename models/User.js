@@ -2,7 +2,10 @@ import pool from "../mysql/sql.js";
 
 class User {
   constructor() {
-    //Empty constructor
+    if (!User.instance) {
+      User.instance = this;
+    }
+    return User.instance;
   }
 
   async insertUser(values) {
