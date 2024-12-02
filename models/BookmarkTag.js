@@ -15,7 +15,7 @@ class BookMarkTag {
   }
 
   async getBookmarksByUserId(userId) {
-    const query = `SELECT b.bookmark_id AS bookmark_id, b.bookmark_url, b.bookmark_title, b.is_public, GROUP_CONCAT(t.tag_name) AS tags
+    const query = `SELECT b.bookmark_id AS bookmark_id, b.bookmark_url, b.bookmark_title, b.is_public, GROUP_CONCAT(t.tag_name) AS tags, b.created_at
                   FROM bookmarks b 
                   JOIN bookmark_tags bt ON b.bookmark_id = bt.bookmark_id 
                   JOIN tags t ON bt.tag_id = t.tag_id 
@@ -30,6 +30,7 @@ class BookMarkTag {
       url: data.bookmark_url,
       title: data.bookmark_title,
       isPublic: data.is_public ? true : false,
+      createdAt: data.created_at,
       tags: data.tags ? data.tags.split(",") : [],
     }));
   }
