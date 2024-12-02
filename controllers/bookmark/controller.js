@@ -24,6 +24,9 @@ const addBookMark = async (req = request, res = response) => {
     return;
   } catch (e) {
     console.error(e);
+    if (e.message === "Bookmark already exists") {
+      return res.status(409).json({ error: "Bookmark already exists" });
+    }
     res.status(500).json({ error: "Internal server error" });
     return;
   }
