@@ -29,8 +29,25 @@ const addBookMark = async (req = request, res = response) => {
   }
 };
 
+const getBookmarkByUserId = async (req = request, res = response) => {
+  const { userId } = req.params;
+  if (!userId) {
+    return res.status(400).json({ error: "Parameter is empty" });
+  }
+  try {
+    const result = await bookMarkTagInstance.getBookmarksByUserId(userId);
+    res.status(200).json(result);
+    return;
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ error: "Internal server error" });
+    return;
+  }
+};
+
 const bookmarkController = {
   addBookMark,
+  getBookmarkByUserId,
 };
 
 export default bookmarkController;
