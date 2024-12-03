@@ -14,7 +14,7 @@ app.use(cookieParser());
 
 //routers
 app.use("/v1/api/auth", AuthRouter);
-app.use("/v1/api/bookmark", BookMarkRouter);
+app.use("/v1/api/bookmarks", BookMarkRouter);
 
 app.get("/v1/api", (req, res) => {
   res.send({ message: "API is working fine." });
