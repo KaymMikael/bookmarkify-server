@@ -7,15 +7,15 @@ class BookMark {
     }
     return BookMark.instance;
   }
-  async #bookmarkExists(bookmark_url) {
+  async #bookmarkExists(bookmark_url, userId) {
     const query =
-      "SELECT COUNT(*) AS count FROM bookmarks WHERE bookmark_url = ?";
-    const [rows] = await pool.query(query, [bookmark_url]);
+      "SELECT COUNT(*) AS count FROM bookmarks WHERE bookmark_url = ? AND user_id = ?";
+    const [rows] = await pool.query(query, [bookmark_url, userId]);
     return rows[0].count > 0;
   }
   async insertBookMark(values) {
     const [user_id, bookmark_title, bookmark_url, is_public] = values;
-    if (await this.#bookmarkExists(bookmark_url)) {
+    if (await this.#bookmarkExists(bookmark_url, user_id)) {
       throw new Error("Bookmark already exists");
     }
     const query =
