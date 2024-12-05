@@ -1,6 +1,6 @@
 import { request, response } from "express";
 import bookMarkInstance from "../../models/BookmarkManager.js";
-import tagInstance from "../../models/Tag.js";
+import tagInstance from "../../models/TagManager.js";
 import bookMarkTagInstance from "../../models/BookmarkTagManager.js";
 
 const addBookMark = async (req = request, res = response) => {
