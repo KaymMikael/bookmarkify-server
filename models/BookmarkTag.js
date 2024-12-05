@@ -34,6 +34,15 @@ class BookMarkTag {
       tags: data.tags ? data.tags.split(",") : [],
     }));
   }
+
+  async deleteById(bookmarkId) {
+    const query = "DELETE FROM bookmark_tags WHERE bookmark_id = ?;";
+    const [result] = await pool.query(query, [bookmarkId]);
+
+    if (result.affectedRows === 0) {
+      throw new Error("Bookmark not found");
+    }
+  }
 }
 
 const bookMarkTagInstance = new BookMarkTag();

@@ -9,5 +9,9 @@ BookMarkRouter.route("/:userId").get(
   verifyToken,
   bookmarkController.getBookmarkByUserId
 );
+BookMarkRouter.route("/:bookmarkId").delete(
+  verifyToken,
+  bookmarkController.deleteBookmark
+);
 
 export default BookMarkRouter;

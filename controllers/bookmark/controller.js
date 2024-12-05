@@ -34,9 +34,11 @@ const addBookMark = async (req = request, res = response) => {
 
 const getBookmarkByUserId = async (req = request, res = response) => {
   const { userId } = req.params;
+
   if (!userId) {
     return res.status(400).json({ error: "Parameter is empty" });
   }
+
   try {
     const result = await bookMarkTagInstance.getBookmarksByUserId(userId);
     res.status(200).json(result);
@@ -48,9 +50,35 @@ const getBookmarkByUserId = async (req = request, res = response) => {
   }
 };
 
+const deleteBookmark = async (req = request, res = response) => {
+  const { bookmarkId } = req.params;
+
+  if (!bookmarkId) {
+    res.status(400).json({ error: "Parameter is empty" });
+    return;
+  }
+
+  try {
+    await bookMarkTagInstance.deleteById(bookmarkId);
+    await bookMarkInstance.deleleteById(bookmarkId);
+
+    res.status(204).json({ message: "Bookmark deleted" });
+    return;
+  } catch (e) {
+    console.log(e);
+    if (e.message === `Bookmark not found`) {
+      res.status(404).json({ error: e.message });
+      return;
+    }
+    res.status(500).json({ error: "Internal server error" });
+    return;
+  }
+};
+
 const bookmarkController = {
   addBookMark,
   getBookmarkByUserId,
+  deleteBookmark,
 };
 
 export default bookmarkController;

@@ -23,6 +23,16 @@ class BookMark {
     const [result] = await pool.query(query, values);
     return result;
   }
+  async deleleteById(bookmarkId) {
+    const query = "DELETE FROM bookmarks WHERE bookmark_id = ?";
+    const [result] = await pool.query(query, [bookmarkId]);
+
+    if (result.affectedRows === 0) {
+      throw new Error("Bookmark not found");
+    }
+
+    return result;
+  }
 }
 
 const bookMarkInstance = new BookMark();
