@@ -2,10 +2,10 @@ import pool from "../mysql/sql.js";
 
 class BookmarkManager {
   constructor() {
-    if (!BookMark.instance) {
-      BookMark.instance = this;
+    if (!BookmarkManager.instance) {
+      BookmarkManager.instance = this;
     }
-    return BookMark.instance;
+    return BookmarkManager.instance;
   }
 
   async #bookmarkExists(bookmark_url, userId) {
