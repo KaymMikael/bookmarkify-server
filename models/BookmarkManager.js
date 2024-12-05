@@ -1,16 +1,27 @@
 import pool from "../mysql/sql.js";
 
-class BookMarkTag {
+class BookmarkManager {
   constructor() {
-    if (!BookMarkTag.instance) {
-      BookMarkTag.instance = this;
+    if (!BookMark.instance) {
+      BookMark.instance = this;
     }
-    return BookMarkTag.instance;
+    return BookMark.instance;
   }
 
-  async insertBookMarkTag(bookmark_id, tag_id) {
-    const query = "INSERT INTO bookmark_tags VALUES (?, ?);";
-    const [result] = await pool.query(query, [bookmark_id, tag_id]);
+  async #bookmarkExists(bookmark_url, userId) {
+    const query =
+      "SELECT COUNT(*) AS count FROM bookmarks WHERE bookmark_url = ? AND user_id = ?";
+    const [rows] = await pool.query(query, [bookmark_url, userId]);
+    return rows[0].count > 0;
+  }
+  async insertBookMark(values) {
+    const [user_id, bookmark_title, bookmark_url, is_public] = values;
+    if (await this.#bookmarkExists(bookmark_url, user_id)) {
+      throw new Error("Bookmark already exists");
+    }
+    const query =
+      "INSERT INTO bookmarks (user_id, bookmark_title, bookmark_url, is_public) VALUES (?, ?, ?, ?);";
+    const [result] = await pool.query(query, values);
     return result;
   }
 
@@ -21,7 +32,9 @@ class BookMarkTag {
                   JOIN tags t ON bt.tag_id = t.tag_id 
                   WHERE b.user_id = ?
                   GROUP BY b.bookmark_id;`;
+
     const [result] = await pool.query(query, [userId]);
+
     if (!result.length) {
       return { message: "No bookmark found" };
     }
@@ -35,16 +48,18 @@ class BookMarkTag {
     }));
   }
 
-  async deleteById(bookmarkId) {
-    const query = "DELETE FROM bookmark_tags WHERE bookmark_id = ?;";
+  async deleleteById(bookmarkId) {
+    const query = "DELETE FROM bookmarks WHERE bookmark_id = ?";
     const [result] = await pool.query(query, [bookmarkId]);
 
     if (result.affectedRows === 0) {
       throw new Error("Bookmark not found");
     }
+
+    return result;
   }
 }
 
-const bookMarkTagInstance = new BookMarkTag();
+const bookMarkInstance = new BookmarkManager();
 
-export default bookMarkTagInstance;
+export default bookMarkInstance;

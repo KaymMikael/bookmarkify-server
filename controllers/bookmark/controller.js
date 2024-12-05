@@ -1,7 +1,7 @@
 import { request, response } from "express";
-import bookMarkInstance from "../../models/Bookmark.js";
+import bookMarkInstance from "../../models/BookmarkManager.js";
 import tagInstance from "../../models/Tag.js";
-import bookMarkTagInstance from "../../models/BookmarkTag.js";
+import bookMarkTagInstance from "../../models/BookmarkTagManager.js";
 
 const addBookMark = async (req = request, res = response) => {
   const { userId, title, url, isPublic, tags } = req.body;
@@ -40,7 +40,7 @@ const getBookmarkByUserId = async (req = request, res = response) => {
   }
 
   try {
-    const result = await bookMarkTagInstance.getBookmarksByUserId(userId);
+    const result = await bookMarkInstance.getBookmarksByUserId(userId);
     res.status(200).json(result);
     return;
   } catch (e) {

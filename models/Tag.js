@@ -1,11 +1,11 @@
 import pool from "../mysql/sql.js";
 
-class Tag {
+class TagManager {
   constructor() {
-    if (!Tag.instance) {
-      Tag.instance = this;
+    if (!TagManager.instance) {
+      TagManager.instance = this;
     }
-    return Tag.instance;
+    return TagManager.instance;
   }
 
   async #addTag(name) {
@@ -37,6 +37,6 @@ class Tag {
   }
 }
 
-const tagInstance = new Tag();
+const tagInstance = new TagManager();
 
 export default tagInstance;
