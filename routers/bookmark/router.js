@@ -13,9 +13,13 @@ BookMarkRouter.route("/tag").get(
   verifyToken,
   bookmarkController.getBookmarksByTag
 );
-BookMarkRouter.route("/:userId").get(
+BookMarkRouter.route("/:userId/user-bookmarks").get(
   verifyToken,
   bookmarkController.getBookmarkByUserId
+);
+BookMarkRouter.route("/:bookmarkId").get(
+  verifyToken,
+  bookmarkController.getBookmarkByBookmarkId
 );
 BookMarkRouter.route("/:bookmarkId").delete(
   verifyToken,
