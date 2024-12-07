@@ -21,6 +21,10 @@ BookMarkRouter.route("/:bookmarkId").get(
   verifyToken,
   bookmarkController.getBookmarkByBookmarkId
 );
+BookMarkRouter.route("/").put(
+  verifyToken,
+  bookmarkController.editBookmarkByBookmarkId
+);
 BookMarkRouter.route("/:bookmarkId").delete(
   verifyToken,
   bookmarkController.deleteBookmark

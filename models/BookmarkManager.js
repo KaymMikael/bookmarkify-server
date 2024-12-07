@@ -151,7 +151,7 @@ class BookmarkManager {
   }
 
   async editBookmarkById(values) {
-    const qery =
+    const query =
       "UPDATE bookmarks SET bookmark_title = ?, bookmark_url = ?, is_public = ? WHERE bookmark_id = ?";
     const [result] = await pool.query(query, values);
     return result;
