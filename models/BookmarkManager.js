@@ -26,10 +26,11 @@ class BookmarkManager {
   }
 
   async getBookmarksByUserId(userId) {
-    const query = `SELECT b.bookmark_id AS bookmark_id, b.bookmark_url, b.bookmark_title, b.is_public, b.user_id, GROUP_CONCAT(t.tag_name) AS tags, b.created_at
+    const query = `SELECT b.bookmark_id AS bookmark_id, b.bookmark_url, b.bookmark_title, b.is_public, b.user_id, u.user_name, GROUP_CONCAT(t.tag_name) AS tags, b.created_at
                   FROM bookmarks b 
                   JOIN bookmark_tags bt ON b.bookmark_id = bt.bookmark_id 
-                  JOIN tags t ON bt.tag_id = t.tag_id 
+                  JOIN tags t ON bt.tag_id = t.tag_id
+                  JOIN users u ON b.user_id = u.user_id
                   WHERE b.user_id = ?
                   GROUP BY b.bookmark_id
                   ORDER BY b.created_at DESC`;
@@ -45,16 +46,18 @@ class BookmarkManager {
       url: data.bookmark_url,
       title: data.bookmark_title,
       isPublic: data.is_public ? true : false,
+      author: data.user_name,
       createdAt: data.created_at,
       tags: data.tags ? data.tags.split(",") : [],
     }));
   }
 
   async getPublicBookmarks() {
-    const query = `SELECT b.bookmark_id AS bookmark_id, b.bookmark_url, b.bookmark_title, b.is_public, b.user_id, GROUP_CONCAT(t.tag_name) AS tags, b.created_at
+    const query = `SELECT b.bookmark_id AS bookmark_id, b.bookmark_url, b.bookmark_title, b.is_public, b.user_id, u.user_name, GROUP_CONCAT(t.tag_name) AS tags, b.created_at
                   FROM bookmarks b 
                   JOIN bookmark_tags bt ON b.bookmark_id = bt.bookmark_id 
-                  JOIN tags t ON bt.tag_id = t.tag_id 
+                  JOIN tags t ON bt.tag_id = t.tag_id
+                  JOIN users u ON b.user_id = u.user_id 
                   WHERE b.is_public= true
                   GROUP BY b.bookmark_id
                   ORDER BY b.created_at DESC`;
@@ -70,6 +73,7 @@ class BookmarkManager {
       url: data.bookmark_url,
       title: data.bookmark_title,
       isPublic: data.is_public ? true : false,
+      author: data.user_name,
       createdAt: data.created_at,
       tags: data.tags ? data.tags.split(",") : [],
     }));
