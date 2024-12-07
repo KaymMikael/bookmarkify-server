@@ -58,7 +58,7 @@ class BookmarkManager {
                   JOIN bookmark_tags bt ON b.bookmark_id = bt.bookmark_id 
                   JOIN tags t ON bt.tag_id = t.tag_id
                   JOIN users u ON b.user_id = u.user_id 
-                  WHERE b.is_public= true
+                  WHERE b.is_public = true
                   GROUP BY b.bookmark_id
                   ORDER BY b.created_at DESC`;
     const [result] = await pool.query(query);
@@ -88,6 +88,50 @@ class BookmarkManager {
     }
 
     return result;
+  }
+
+  async getByTag(tag) {
+    const query = `SELECT b.bookmark_id AS bookmark_id, b.bookmark_url, b.bookmark_title, b.is_public, b.user_id, u.user_name, GROUP_CONCAT(t.tag_name) AS tags, b.created_at
+                FROM 
+                  bookmarks b 
+                JOIN 
+                  bookmark_tags bt ON b.bookmark_id = bt.bookmark_id 
+                JOIN 
+                  tags t ON t.tag_id = bt.tag_id 
+                JOIN users u ON b.user_id = u.user_id
+                WHERE 
+                  b.bookmark_id IN (
+                    SELECT 
+                      b2.bookmark_id 
+                    FROM 
+                      bookmarks b2 
+                    JOIN 
+                      bookmark_tags bt2 ON b2.bookmark_id = bt2.bookmark_id 
+                    JOIN 
+                      tags t2 ON t2.tag_id = bt2.tag_id 
+                    WHERE 
+                      t2.tag_name LIKE ?
+                  )
+                GROUP BY 
+                  b.bookmark_id;`;
+
+    const [result] = await pool.query(query, [`${tag.replace("-", " ")}%`]);
+
+    //Return this if there are no bookmark
+    if (!result.length) {
+      return { message: "No bookmark found" };
+    }
+
+    return result.map((data) => ({
+      bookmarkId: data.bookmark_id,
+      user_id: data.user_id,
+      url: data.bookmark_url,
+      title: data.bookmark_title,
+      isPublic: data.is_public ? true : false,
+      author: data.user_name,
+      createdAt: data.created_at,
+      tags: data.tags ? data.tags.split(",") : [],
+    }));
   }
 }
 

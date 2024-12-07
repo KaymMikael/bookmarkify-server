@@ -9,6 +9,10 @@ BookMarkRouter.route("/").get(
   verifyToken,
   bookmarkController.getPublicBookmarks
 );
+BookMarkRouter.route("/tag").get(
+  verifyToken,
+  bookmarkController.getBookmarksByTag
+);
 BookMarkRouter.route("/:userId").get(
   verifyToken,
   bookmarkController.getBookmarkByUserId

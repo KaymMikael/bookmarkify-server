@@ -88,11 +88,22 @@ const getPublicBookmarks = async (req = request, res = response) => {
   }
 };
 
+const getBookmarksByTag = async (req = request, res = response) => {
+  const { tag } = req.query;
+  try {
+    const result = await bookMarkInstance.getByTag(tag);
+    res.status(200).json(result);
+  } catch (e) {
+    console.log(`ERROR: ${e}`);
+  }
+};
+
 const bookmarkController = {
   addBookMark,
   getBookmarkByUserId,
   deleteBookmark,
   getPublicBookmarks,
+  getBookmarksByTag,
 };
 
 export default bookmarkController;
