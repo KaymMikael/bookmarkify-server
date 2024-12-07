@@ -75,10 +75,24 @@ const deleteBookmark = async (req = request, res = response) => {
   }
 };
 
+const getPublicBookmarks = async (req = request, res = response) => {
+  try {
+    const result = await bookMarkInstance.getPublicBookmarks();
+
+    res.status(200).json(result);
+    return;
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ error: "Internal server error" });
+    return;
+  }
+};
+
 const bookmarkController = {
   addBookMark,
   getBookmarkByUserId,
   deleteBookmark,
+  getPublicBookmarks,
 };
 
 export default bookmarkController;
